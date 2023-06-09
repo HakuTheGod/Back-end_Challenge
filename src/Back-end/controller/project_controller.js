@@ -5,14 +5,21 @@ const page_index = (req, res) => {
     res.send('HELLO WORLD');
 }
 
-/*Find the user that matches the id */
+/*Find the user that matches the id, throw 404 message if there is no match */
 const find_user = (req, res) => {
     const id = req.params.id;
     User.findById(id)
         .then((result) => {
-            res.send(result)
+            if(result){
+                res.send(result)
+            }
+            else{
+                res.redirect('/404')
+            }
         })
-        .catch((err) => console.log(err))
+        .catch((err) => {
+            console.log(err);
+        })
 }
 
 /*Add a new user to the database */
@@ -25,35 +32,42 @@ const add_user = (req, res) => {
         .catch((err) => console.log(err))
 }
 
-/*Update an existing user in the database with new values*/
+/*Update an existing user in the database with new values, throw 404 message if there is no match*/
 const update_user = (req, res) => {
-    const user = new User(JSON.parse(req.params.user));
-    const id = user.params.id;
-    User.findByIdAndUpdate(id, user)
-        .then((result) => {
+    const user = JSON.parse(req.params.user);
+    const id = req.params.id;
+    User.findByIdAndUpdate(id, user, {new: true})
+    .then((result) => {
+        if(result){
             res.send(result)
-        })
-        .catch((err) => console.log(err))
+        }
+        else{
+            res.redirect('/404')
+        }
+    })
+    .catch((err) => {
+        console.log(err);
+    })
 }
 
-/*Delete an existing user from the database*/
+/*Delete an existing user from the database, throw 404 message if there is no match*/
 const delete_user = (req, res) => {
     const id = req.params.id;
-    var err = 1;
-    /*Find user and delete him*/
-    for(let i = 0; i < users.length; i++){
-            if(users[i].id === id){
-                err = 0;
-                users.splice(i, 1);
+    User.findByIdAndDelete(id)
+        .then((result) => {
+            if(result){
+                res.send(result)
             }
-    }
-    /*IF user does not exist redirect*/
-    if(err === 1){
-        res.redirect('/404');
-    }
-    res.send(users);
+            else{
+                res.redirect('/404')
+            }
+        })
+        .catch((err) => {
+            console.log(err);
+        })
 }
 
+/* Message for 404 status error */
 const error_404 = (req, res) => {
     res.send('OOPS COULD NOT FIND THE USER.');
 }

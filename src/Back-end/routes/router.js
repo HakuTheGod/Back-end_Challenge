@@ -8,19 +8,24 @@ const router = express.Router();
 /*Respond with HELLO WORLD every time someone starts the server and navigates to localhost:3000.*/
 router.get('/', controller.page_index);
 
-/*The function searches for a user with a specific ID and returns him to the client.*/
+/*The function searches the database for a user with a specific ID 
+    and returns it's details to the client.*/
 router.get('/get/:id', controller.find_user);
 
-/*Creates a new user with a different ID than the others and adds him to the database.
-The function returns the list of the current users.*/
+/*This function takes a collection of the user details in the form of
+    {"name":"The user's name", "email":"the user's email", "phone":"the user's phone number"}
+    and created a database entry with a unique id and the details passed as the parameter.
+    The function returns the details of the database entry that was just created to the client.*/
 router.post('/post/:user', controller.add_user);
 
 /*Searches for the user with the same ID as the one given in parameter and
- updates the values of name, email and phone.*/
-router.put('/put/:id/:username/:email/:phone', controller.update_user);
+    updates the values of name, email and phone.
+    The function returns the details of the database entry after they have been updated to the client*/
+router.put('/put/:id/:user', controller.update_user);
 
-/*Searches for the user with the specific ID given as parameter and when 
-it finds him it deletes him and prints the other users in the database .*/
+/*Searches in the database for the user with the specific ID that is given as parameter, and when 
+    it finds him it deletes his entry from the database and returns the details of the 
+    deleted entry to the client.*/
 router.delete('/delete/:id', controller.delete_user);
 
 /*Throw error message if user does not exist*/
