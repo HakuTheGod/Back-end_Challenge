@@ -1,10 +1,4 @@
-var currID = 1;
-const users = [{
-    id: `${currID}`,
-    name: "Nikola",
-    email: "something@gmail.com",
-    phone: '6937918921'
-}];
+const User = require('../model/user');
 
 /*Respond back to the client with HELLO WORLD */
 const page_index = (req, res) => {
@@ -14,54 +8,32 @@ const page_index = (req, res) => {
 /*Find the user that matches the id */
 const find_user = (req, res) => {
     const id = req.params.id;
-    var err = 1;
-    /*Find user and return him*/
-    for(let i = 0; i < users.length; i++){
-            if(id === users[i].id){
-                    err = 0;
-                    res.send(users[i]);
-            }
-    }
-    /*IF user does not exist redirect*/
-    if(err === 1){
-        res.redirect('/404');
-    }
+    User.findById(id)
+        .then((result) => {
+            res.send(result)
+        })
+        .catch((err) => console.log(err))
 }
 
 /*Add a new user to the database */
 const add_user = (req, res) => {
-    currID++;
-    const newUser = {
-        id: `${currID}`,
-        name: "George",
-        email: "newEmail@gmail.com",
-        phone: '6994352622'
-    };
-    users.push(newUser);
-    res.send(users);
+    const user = new User(JSON.parse(req.params.user));
+    user.save()
+        .then((result) => {
+            res.send(result)
+        })
+        .catch((err) => console.log(err))
 }
 
 /*Update an existing user in the database with new values*/
 const update_user = (req, res) => {
-    var err = 1;
-    const id = req.params.id;
-    const username = req.params.username;
-    const email = req.params.email;
-    const phone = req.params.phone;
-    /*Find user and update him*/
-    for(let i = 0; i < users.length; i++){
-        if(users[i].id === id){
-            err = 0;
-            users[i].name = username;
-            users[i].email = email;
-            users[i].phone = phone;
-        }
-    }
-    /*IF user does not exist redirect*/
-    if(err === 1){
-        res.redirect('/404');
-    }
-    res.send(users);
+    const user = new User(JSON.parse(req.params.user));
+    const id = user.params.id;
+    User.findByIdAndUpdate(id, user)
+        .then((result) => {
+            res.send(result)
+        })
+        .catch((err) => console.log(err))
 }
 
 /*Delete an existing user from the database*/

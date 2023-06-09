@@ -13,7 +13,7 @@ router.get('/get/:id', controller.find_user);
 
 /*Creates a new user with a different ID than the others and adds him to the database.
 The function returns the list of the current users.*/
-router.post('/post', controller.add_user);
+router.post('/post/:user', controller.add_user);
 
 /*Searches for the user with the same ID as the one given in parameter and
  updates the values of name, email and phone.*/
