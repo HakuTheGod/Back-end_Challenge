@@ -1,0 +1,182 @@
+openapi: '3.0.0'
+info:
+  version: '1.0.0'
+  title: Back-end Challenge API
+  description: Simple API for testing the GET, POST, PUT and DELETE methods of NODE.JS and EXPRESS.JS with an actual database(mongoDB, mongoose)
+
+servers:
+  - url: https://localhost:4000
+paths:
+  /:
+    get:
+      description: Returns a message that contains 'HELLO WORLD'
+      responses:
+        200:
+          description: Successfully returned the specific user
+          content:
+            text/plain:
+              schema:
+                type: string
+  /get/{id}:
+    get:
+      description: Returns the user that has the same id as the one given as parameter
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The id parameter is used to find a specific user and can be any one of the existing ids in the database
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successfully returned the specific user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                  name:
+                    type: string
+                  email:
+                    type: string
+                  phone:
+                    type: string
+                  __v:
+                    type: string
+        400:
+          description: There was an something wrong with the request
+          content:
+            text/plain:
+              schema:
+                type: string
+        404:
+          description: Requested user does not exist in the database
+          content:
+            text/plain:
+              schema:
+                type: string
+  /post/{user}:
+    post:
+      description: Creates a new user object, stores it in the database and returns its details to the client
+      parameters:
+      - name: user
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Successfully stored the user to the database and returned it's details
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - name
+                  - email
+                properties:
+                  _id:
+                    type: object
+                  name:
+                    type: string
+                  email:
+                    type: string
+                  phone:
+                    type: string
+                  __v:
+                    type: number
+        400:
+          description: There was an something wrong with the request
+          content:
+            text/plain:
+              schema:
+                type: string
+  /put/{id}/{user}:
+    put:
+      description: Updates a specific user and returns his details after the update
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The id parameter is used to find a specific user and can be any one of the existing ids in the database
+          schema:
+            type: string
+
+        - name: user
+          in: path
+          required: true
+          description: Creates a new user object, stores it in the database and returns its details to the client
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successfully updated and returned the specific user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: object
+                  name:
+                    type: string
+                  email:
+                    type: string
+                  phone:
+                    type: string
+                  __v:
+                    type: number
+        400:
+          description: There was an something wrong with the request
+          content:
+            text/plain:
+              schema:
+                type: string
+        404:
+          description: Requested user does not exist in the database
+          content:
+            text/plain:
+              schema:
+                type: string
+  /delete/{id}:
+    delete:
+      description: Finds and deletes a specific user and returns the deleted user's details
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The id parameter is used to find a specific user and can be any one of the existing ids in the database
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successfully deleted the user and returned the specific user's details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                  name:
+                    type: string
+                  email:
+                    type: string
+                  phone:
+                    type: string
+                  __v:
+                    type: number
+        400:
+          description: There was an something wrong with the request
+          content:
+            text/plain:
+              schema:
+                type: string
+        404:
+          description: Requested user does not exist in the database
+          content:
+            text/plain:
+              schema:
+                type: string

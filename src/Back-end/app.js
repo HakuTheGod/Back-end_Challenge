@@ -1,7 +1,13 @@
 /*Returning a function for express and storing it in a variable*/
 const express = require('express');
 
+const path = require('path');
+
 const mongoose = require('mongoose');
+
+const openapi_validator = require('express-openapi-validator');
+
+const apiSpec = path.join(__dirname, 'definition.yaml');
 
 /* Returning the router function and storing it in a variable.*/
 const routes = require('./routes/router');
@@ -18,7 +24,24 @@ mongoose.connect(DBUri)
 /*Using the function to create the server*/
 const app = express();
 
+app.use(
+    openapi_validator.middleware({
+        apiSpec: apiSpec,
+        validateRequests: true,
+        validateResponses: true
+    }),
+);
+
 app.use(routes);
+
+
+
+app.use((err, req, res, next) => {
+    res.status(err.status || 500).json({
+        message: err.message,
+        errors: err.errors
+    });
+});
 
 
 

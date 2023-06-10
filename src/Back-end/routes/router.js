@@ -31,4 +31,7 @@ router.delete('/delete/:id', controller.delete_user);
 /*Throw error message if user does not exist*/
 router.get('/404', controller.error_404)
 
+/*Throw error message if bad request*/
+router.get('/400', controller.error_400)
+
 module.exports = router;
