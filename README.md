@@ -79,6 +79,11 @@ parameters: none\
 get:\
 parameters: none\
 
+## Testing
+
+To test the endpoints, you need to download [postman](https://www.postman.com) create an account and make the requests you want to test.
+
+In case the route is protected you need to include a header on postman with ```Key: Authorisation``` and ```value: Bearer{{jwt}}```
 ## Authors
 
 - [@NikolaKovatsevits](https://www.github.com/HakuTheGod)
