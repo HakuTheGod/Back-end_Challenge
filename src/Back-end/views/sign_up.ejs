@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <nav>
+    <h1><a href="/">Ninja Smoothies</a></h1>
+    <ul>
+      <li><a href="/login">Log in</a></li>
+      <li><a href="/signup" class="btn">Sign up</a></li>
+    </ul>
+  </nav>
+  
+<body>
+  <h1>Sign Up</h1>
+  <form id="signup-form" action="/postUser">
+    <label for="username">Username:</label>
+    <input type="text" id="name" name="name" required>
+    <br>
+    <label for="password">Password:</label>
+    <input type="text" id="password" name="password" required>
+    <br>
+    <label for="email">Email:</label>
+    <input type="text" id="email" name="email" required>
+    <br>
+    <label for="phone">Phone Number:</label>
+    <input type="text" id="phone" name="phone" required>
+    <br>
+    <input type="submit" value="Sign Up">
+  </form>
+
+  <script>
+    const form = document.querySelector('form');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      // Handle sign-up form submission here
+      // You can make an API call to your backend server to create a new user
+      // You can also handle validation and error handling
+
+    
+
+      // get values
+      const name = form.name.value;
+      const email = form.email.value;
+      const password = form.password.value;
+      const phone = form.phone.value;
+
+
+      try {
+        const res = await fetch('/postUser', { 
+          method: 'POST', 
+          body: JSON.stringify({ name, email, password, phone }),
+          headers: {'Content-Type': 'application/json'}
+        });
+        const data = await res.json();
+        console.log(data);
+        if (data.errors) {
+          console.log(data.errors);
+        }
+        if (data.user) {
+          location.assign('/');
+        }
+
+      }
+      catch (err) {
+        console.log(err);
+      }
+    });
+  </script>
+</body>
+</html>

@@ -4,29 +4,21 @@ info:
   title: Back-end Challenge API
   description: Simple API for testing the GET, POST, PUT and DELETE methods of NODE.JS and EXPRESS.JS with an actual database(mongoDB, mongoose)
 
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: jwt
+
 servers:
   - url: https://localhost:4000
 paths:
-  /:
+  /getUser:
     get:
-      description: Returns a message that contains 'HELLO WORLD'
-      responses:
-        200:
-          description: Successfully returned the specific user
-          content:
-            text/plain:
-              schema:
-                type: string
-  /get/{id}:
-    get:
+      security:
+        - bearerAuth: [jwt]
       description: Returns the user that has the same id as the one given as parameter
-      parameters:
-        - name: id
-          in: path
-          required: true
-          description: The id parameter is used to find a specific user and can be any one of the existing ids in the database
-          schema:
-            type: string
       responses:
         200:
           description: Successfully returned the specific user
@@ -39,6 +31,8 @@ paths:
                     type: string
                   name:
                     type: string
+                  password:
+                    type: string
                   email:
                     type: string
                   phone:
@@ -46,7 +40,7 @@ paths:
                   __v:
                     type: string
         400:
-          description: There was an something wrong with the request
+          description: There was something wrong with the request
           content:
             text/plain:
               schema:
@@ -57,59 +51,12 @@ paths:
             text/plain:
               schema:
                 type: string
-  /post/{user}:
-    post:
-      description: Creates a new user object, stores it in the database and returns its details to the client
-      parameters:
-      - name: user
-        in: path
-        required: true
-        schema:
-          type: string
-      responses:
-        200:
-          description: Successfully stored the user to the database and returned it's details
-          content:
-            application/json:
-              schema:
-                type: object
-                required:
-                  - name
-                  - email
-                properties:
-                  _id:
-                    type: object
-                  name:
-                    type: string
-                  email:
-                    type: string
-                  phone:
-                    type: string
-                  __v:
-                    type: number
-        400:
-          description: There was an something wrong with the request
-          content:
-            text/plain:
-              schema:
-                type: string
-  /put/{id}/{user}:
-    put:
-      description: Updates a specific user and returns his details after the update
-      parameters:
-        - name: id
-          in: path
-          required: true
-          description: The id parameter is used to find a specific user and can be any one of the existing ids in the database
-          schema:
-            type: string
 
-        - name: user
-          in: path
-          required: true
-          description: Creates a new user object, stores it in the database and returns its details to the client
-          schema:
-            type: string
+  /putUser:
+    put:
+      security:
+        - bearerAuth: []
+      description: Updates a specific user and returns his details after the update
       responses:
         200:
           description: Successfully updated and returned the specific user
@@ -129,7 +76,7 @@ paths:
                   __v:
                     type: number
         400:
-          description: There was an something wrong with the request
+          description: There was something wrong with the request
           content:
             text/plain:
               schema:
@@ -140,16 +87,12 @@ paths:
             text/plain:
               schema:
                 type: string
-  /delete/{id}:
+
+  /deleteUser:
     delete:
+      security:
+        - bearerAuth: []
       description: Finds and deletes a specific user and returns the deleted user's details
-      parameters:
-        - name: id
-          in: path
-          required: true
-          description: The id parameter is used to find a specific user and can be any one of the existing ids in the database
-          schema:
-            type: string
       responses:
         200:
           description: Successfully deleted the user and returned the specific user's details
@@ -162,6 +105,8 @@ paths:
                     type: string
                   name:
                     type: string
+                  password:
+                    type: string
                   email:
                     type: string
                   phone:
@@ -169,7 +114,7 @@ paths:
                   __v:
                     type: number
         400:
-          description: There was an something wrong with the request
+          description: There was something wrong with the request
           content:
             text/plain:
               schema:
@@ -180,3 +125,156 @@ paths:
             text/plain:
               schema:
                 type: string
+
+  /postUser:
+    post:
+      security:
+        - bearerAuth: []
+      description: Creates a new user object, stores it in the database and returns its details to the client
+      responses:
+        200:
+          description: Successfully stored the user to the database and returned its details
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - name
+                  - password
+                  - email
+                properties:
+                  _id:
+                    type: object
+                  name:
+                    type: string
+                  password:
+                    type: string
+                  email:
+                    type: string
+                  phone:
+                    type: string
+                  __v:
+                    type: number
+        400:
+          description: There was something wrong with the request
+          content:
+            text/plain:
+              schema:
+                type: string
+
+  /:
+    get:
+      description: Returns a message that contains 'HELLO WORLD'
+      responses:
+        200:
+          description: Successfully returned the specific user
+          content:
+            text/plain:
+              schema:
+                type: string
+
+  /sign_up:
+    get:
+      description: Redirects the user to the sign_up page
+      responses:
+        200:
+          description: Successfully redirected to the sign_up page
+          content:
+            text/html:
+              schema:
+                type: object
+        404:
+          description: Requested page does not exist
+          content:
+            text/plain:
+              schema:
+                type: string
+    post:
+      description: Creates a new user object, stores it in the database and returns its details to the client
+      responses:
+        200:
+          description: Successfully stored the user to the database and returned its details
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - name
+                  - password
+                  - email
+                properties:
+                  _id:
+                    type: object
+                  name:
+                    type: string
+                  password:
+                    type: string
+                  email:
+                    type: string
+                  phone:
+                    type: string
+                  __v:
+                    type: number
+        400:
+          description: There was something wrong with the request
+          content:
+            text/plain:
+              schema:
+                type: string
+
+
+  /log_in:
+    get:
+      description: Redirects the user to the log_in page
+      responses:
+        200:
+          description: Successfully redirected to the log_in page
+          content:
+            text/html:
+              schema:
+                type: object
+        404:
+          description: Requested page does not exist
+          content:
+            text/plain:
+              schema:
+                type: string
+    post:
+      description: Logs the user into the system
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                password:
+                  type: string
+              required:
+                - name
+                - password
+      responses:
+        200:
+          description: Successfully logged the user into the system
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    type: object
+                    properties:
+                      user:
+                        type: string
+                        description: The user ID
+        400:
+          description: There was something wrong with the request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
